@@ -4,5 +4,7 @@ const mongoDB = require("./data/database.js");
 mongoDB();
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server is working on port: ${process.env.PORT} in ${process.env.NODE_ENV} mode `);
+  console.log(
+    `Server is working on port: ${process.env.PORT} in ${process.env.NODE_ENV} mode `
+  );
 });

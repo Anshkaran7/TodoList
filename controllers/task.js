@@ -1,7 +1,6 @@
 const Task = require("../models/task");
 const { ErrorHandler } = require("../middlewares/error");
 
-
 const newTask = async (req, res, next) => {
   try {
     const { title, description } = req.body;

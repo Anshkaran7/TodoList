@@ -2,7 +2,7 @@ const {
   register,
   GetMyProfile,
   login,
-  logout
+  logout,
 } = require("../controllers/user.js");
 const express = require("express");
 const IsAuthenticate = require("../middlewares/auth.js");

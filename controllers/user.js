@@ -10,23 +10,20 @@ const GetMyProfile = async (req, res) => {
   });
 };
 
-
 const logout = async (req, res) => {
   res
     .status(200)
     .cookie("token", "", {
-       expires: new Date(Date.now()),
-       sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-       secure: process.env.NODE_ENV === "Development" ? false : true,
-      })
+      expires: new Date(Date.now()),
+      sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "Development" ? false : true,
+    })
     .json({
       success: true,
       message: "Logout successfully",
       user: req.user,
     });
 };
-
-
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -49,8 +46,6 @@ const login = async (req, res, next) => {
 
   sendCookie(user, res, 200, `Welcome back, ${user.name}`);
 };
-
-
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
