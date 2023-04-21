@@ -3,6 +3,8 @@ const userRouter = require("./routes/user.js");
 const taskRouter = require("./routes/task.js");
 const cookieParser = require("cookie-parser");
 const { ErrorMiddlewares } = require("./middlewares/error.js");
+const cors = require("cors")
+
 
 require("dotenv").config({
   path: "./data/config.env",
@@ -15,7 +17,11 @@ app.use(cookieParser())
 //using Routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/task", taskRouter)
-
+app.use(cors({
+  origin: [process.env.FRONTEND_URL],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}))
 app.get("/", (req, res) => {
   res.send("Nice Working");
 });
