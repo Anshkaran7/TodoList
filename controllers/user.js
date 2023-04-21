@@ -2,28 +2,25 @@ const User = require("../models/user.js");
 const bcrypt = require("bcrypt");
 const sendCookie = require("../utils/feature.js");
 
-
 const GetAllusers = async (req, res) => {};
 
 const GetMyProfile = async (req, res) => {
-  const id = "myId";
-
-  const {token }= req.cookies;
-  console.log(token);
-
-  if(!token)
-  return res.status(404).json({
-    success: false,
-    message: "Login First",
-  });
-
-  const decoded = jwt.verify(token, process.env.JWT_SECRET)
-  const user = await User.findById(decoded._id);
   res.status(200).json({
     success: true,
-    message: "Id found",
-    user,
+    message: "Id found", 
+    user: req.user,
   });
+};
+
+const logout = async (req, res) => {
+  res
+    .status(200)
+    .cookie("token", "", { expires: new Date(Date.now()) })
+    .json({
+      success: true,
+      message:"Logout successfully",
+      user: req.user,
+    });
 };
 
 const login = async (req, res, next) => {
@@ -65,4 +62,4 @@ const register = async (req, res) => {
   sendCookie(user, res, 201, "Registered Successfully");
 };
 
-module.exports = { GetAllusers, GetMyProfile, login, register };
+module.exports = { GetAllusers, GetMyProfile, login, logout, register };
