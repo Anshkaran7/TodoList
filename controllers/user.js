@@ -2,7 +2,6 @@ const User = require("../models/user.js");
 const bcrypt = require("bcrypt");
 const sendCookie = require("../utils/feature.js");
 
-const GetAllusers = async (req, res) => {};
 
 const GetMyProfile = async (req, res) => {
   res.status(200).json({
@@ -62,4 +61,4 @@ const register = async (req, res) => {
   sendCookie(user, res, 201, "Registered Successfully");
 };
 
-module.exports = { GetAllusers, GetMyProfile, login, logout, register };
+module.exports = { GetMyProfile, login, logout, register };
