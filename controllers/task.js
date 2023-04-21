@@ -1,4 +1,5 @@
 const Task = require("../models/task");
+const {ErrorHandler} = require("../middlewares/error");
 
 const newTask = async (req, res, next) => {
   const { title, description } = req.body;
@@ -26,40 +27,29 @@ const GetmyTask = async (req, res) => {
   });
 };
 
-const updateTask = async (req, res) => {
-  
-
+const updateTask = async (req, res,next) => {
   const task = await Task.findById(req.params.id);
   task.Iscompleted = !task.Iscompleted;
-  if(!user){
-    return res.status(404).json({
-        status:false,
-        message:"Invalid Id"
-    })
-}
+  if (!task) return next(new ErrorHandler("Task not found", 404));
+
   await task.save();
 
   res.status(200).json({
     success: true,
-    message:"Task updated!"
+    message: "Task updated!",
   });
 };
 
-const deleteTask = async (req, res) => {
+const deleteTask = async (req, res, next) => {
+  const task = await Task.findById(req.params.id);
 
-    const task = await Task.findById(req.params.id);
-    
-    if(!user){
-        return res.status(404).json({
-            status:false,
-            message:"Invalid Id"
-        })
-    }
-    await task.deleteOne();
-  
+  if (!task)
+    if (!task) return next(new ErrorHandler("Task not found", 404));
+  await task.deleteOne();
+
   res.status(200).json({
     success: true,
-    message:"Task deleted!"
+    message: "Task deleted!",
   });
 };
 
