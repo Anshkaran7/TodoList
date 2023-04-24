@@ -1,6 +1,7 @@
 const User = require("../models/user.js");
 const bcrypt = require("bcrypt");
 const sendCookie = require("../utils/feature.js");
+const ErrorHandler = require("../middlewares/error")
 
 const GetMyProfile = async (req, res) => {
   res.status(200).json({
@@ -26,42 +27,40 @@ const logout = async (req, res) => {
 };
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  let user = await User.findOne({ email }).select("+password");
-  if (!user) {
-    return res.status(404).json({
-      success: false,
-      message: "Invalid Email or password",
-    });
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) return next(new ErrorHandler("Invalid Email or Password", 400));
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch)
+      return next(new ErrorHandler("Invalid Email or Password", 400));
+
+    sendCookie(user, res, `Welcome back, ${user.name}`, 200);
+  } catch (error) {
+    next(error);
   }
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (!isMatch) {
-    return res.status(404).json({
-      success: false,
-      message: "Invalid Email or password",
-    });
   }
-
-  sendCookie(user, res, 200, `Welcome back, ${user.name}`);
-};
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-  let user = await User.findOne({ email });
-  if (user) {
-    return res.status(404).json({
-      success: false,
-      message: "User Already exist",
-    });
+    let user = await User.findOne({ email });
+
+    if (user) return next(new ErrorHandler("User Already Exist", 400));
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user = await User.create({ name, email, password: hashedPassword });
+
+    sendCookie(user, res, "Registered Successfully", 201);
+  } catch (error) {
+    next(error);
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  user = await User.create({ name, email, password: hashedPassword });
-
-  sendCookie(user, res, 201, "Registered Successfully");
 };
 
 module.exports = { GetMyProfile, login, logout, register };

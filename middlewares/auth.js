@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+
 const IsAuthenticate = async (req, res, next) => {
   const { token } = req.cookies;
 
@@ -10,6 +11,7 @@ const IsAuthenticate = async (req, res, next) => {
     });
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  
   req.user = await User.findById(decoded._id);
   next();
 };
