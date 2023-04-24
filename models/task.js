@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  Iscompleted: {
+  isCompleted: {
     type: Boolean,
     default: false,
   },
@@ -18,11 +18,10 @@ const schema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  isCreated: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
 });
-
 const Task = mongoose.model("task", schema);
 module.exports = Task;

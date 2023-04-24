@@ -11,10 +11,6 @@ require("dotenv").config({
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-//using middlewares
-
-//using Routes
-
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
@@ -22,11 +18,16 @@ app.use(
     credentials: true,
   })
 );
+
+// Using routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/task", taskRouter);
+
 app.get("/", (req, res) => {
-  res.send("Nice Working");
+  res.send("Nice working");
 });
+
+// Using Error Middleware
 app.use(ErrorMiddlewares);
 module.exports = app;
 
