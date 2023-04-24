@@ -38,9 +38,10 @@ const GetmyTask = async (req, res) => {
 const updateTask = async (req, res, next) => {
   try {
     const task = await Task.findById(req.params.id);
-    task.Iscompleted = !task.Iscompleted;
+   
     if (!task) return next(new ErrorHandler("Task not found", 404));
 
+    task.isCompleted = !task.isCompleted;
     await task.save();
 
     res.status(200).json({

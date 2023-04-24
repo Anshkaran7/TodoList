@@ -3,28 +3,6 @@ const bcrypt = require("bcrypt");
 const sendCookie = require("../utils/feature.js");
 const ErrorHandler = require("../middlewares/error")
 
-const GetMyProfile = async (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Id found",
-    user: req.user,
-  });
-};
-
-const logout = async (req, res) => {
-  res
-    .status(200)
-    .cookie("token", "", {
-      expires: new Date(Date.now()),
-      sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
-      secure: process.env.NODE_ENV === "Development" ? false : true,
-    })
-    .json({
-      success: true,
-      message: "Logout successfully",
-      user: req.user,
-    });
-};
 
 const login = async (req, res, next) => {
   try {
@@ -61,6 +39,29 @@ const register = async (req, res) => {
   } catch (error) {
     next(error);
   }
+};
+
+const GetMyProfile = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Id found",
+    user: req.user,
+  });
+};
+
+const logout = async (req, res) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+      sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
+      secure: process.env.NODE_ENV === "Development" ? false : true,
+    })
+    .json({
+      success: true,
+      message: "Logout successfully",
+      user: req.user,
+    });
 };
 
 module.exports = { GetMyProfile, login, logout, register };
